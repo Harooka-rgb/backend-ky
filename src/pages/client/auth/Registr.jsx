@@ -1,11 +1,26 @@
 import { Form, Input, Button, Card, Typography, Row, Col } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
 const RegistrPage = () => {
-  const onFinish = (values) => {
+  const navigate = useNavigate()
+  const onFinish = async (values) => {
     console.log('Success:', values);
+    const response = await fetch("http://77.95.206.95:8080/api/auth/register/", 
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(values) //js object change to json string  
+    })
+    if(response.status === 200){
+          navigate('/login');
+    }
+    const data = await response.json()
+    console.log(data);
   };
 
   return (
@@ -79,7 +94,7 @@ const RegistrPage = () => {
               
               <Form.Item
                 label="Confirm Password"
-                name="confirmPassword"
+                name="password_confirm"
                 rules={[{ required: true, message: 'Please enter your password correctly.' }]}
               >
                 <Input.Password
@@ -91,7 +106,7 @@ const RegistrPage = () => {
 
               <Form.Item
                 label="First Name"
-                name="firstName"
+                name="first_name"
                 rules={[{ required: true, message: 'Please input your first name!' }]}
               >
                 <Input placeholder="Enter your first name" size="large" />
@@ -99,7 +114,7 @@ const RegistrPage = () => {
 
               <Form.Item
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 rules={[{ required: true, message: 'Please input your last name!' }]}
               >
                 <Input placeholder="Enter your last name" size="large" />
@@ -108,7 +123,7 @@ const RegistrPage = () => {
 
               <Form.Item style={{ marginTop: 40 }}>
                 <Button type="primary" htmlType="submit" size="large" block style={{ borderRadius: 8, height: 45 }}>
-                  Sign In
+                  Sign up
                 </Button>
               </Form.Item>
 

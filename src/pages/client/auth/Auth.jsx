@@ -3,8 +3,23 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 const { Title, Text } = Typography;
 
 const LoginPage = () => {
-  const onFinish = (values) => {
-    console.log('Success:', values);
+  const navigate = useNavigate()
+  const onFinish = async (values) => {
+     console.log('Success:', values);
+    const response = await fetch("http://77.95.206.95:8080/api/auth/login/", 
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(values) //js object change to json string  
+    })
+    if(response.status === 200){
+          navigate('/');
+
+    }
+    const data = await response.json()
+    console.log(data);
   };
 
   return (
@@ -77,7 +92,7 @@ const LoginPage = () => {
 
               <Form.Item
                 label="First Name"
-                name="firstName"
+                name="first_name"
                 rules={[{ required: true, message: 'Please input your first name!' }]}
               >
                 <Input placeholder="Enter your first name" size="large" />
@@ -85,7 +100,7 @@ const LoginPage = () => {
 
               <Form.Item
                 label="Last Name"
-                name="lastName"
+                name="last_name"
                 rules={[{ required: true, message: 'Please input your last name!' }]}
               >
                 <Input placeholder="Enter your last name" size="large" />
